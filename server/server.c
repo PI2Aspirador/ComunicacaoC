@@ -38,27 +38,25 @@ char * get_data(char *texto){
 }
 
 //Função utilizada para tratar toda a conexão com o cliente
-void * trata_cliente(void * socket_cliente) {
-	char buffer[100];
-	int tamanho_recebido, tamanho_envio, i;
+void * get_distance(void * socket_cliente) {
+	int tamanho_recebido, tamanho_envio, i=0;
 	int socket = *((int*) socket_cliente);
+	int *distance;
+	distance = malloc(sizeof(int*));
+	float limit = 5;
+
 	//pega a info, retornando o tamanho dessa info
-	if((tamanho_recebido = recv(socket, buffer, 100, 0)) < 0)
-		printf("Erro no recv()\n");
-	buffer[tamanho_recebido] = '\0';//adicionando final da string
-	//printf("Olha aqui: %d, %s\n\n", tamanho_recebido, buffer);
-	//É uma requisição GET?
-	if(buffer[0] == 'D' && buffer[1] == ':' && buffer[2] == ' '){
-		//o nome do arquivo começa na posição 4 do vetor, acabando no próximo espaço em branco.
-		printf("Isso: %s\n", buffer);
-		printf("Recebi distancia: ");
-		for(i=3 ; i<=strlen(buffer) ; i++){ //faço o parser para obter o arquivo desejado pelo cliente
-			printf("%c", buffer[i]);
-		}	
-	}
-	close(socket);
-	pthread_detach(pthread_self());//Faz com que a própria thread seja desanexada sozinha, evitando
-	//a necessidade do pthread_join().
+	printf("get_distance\n");
+	do{
+		printf("I = %d\n", i);
+		if((tamanho_recebido = recv(socket, &distance, sizeof(float*), 0)) < 0){
+			printf("Erro no recv()\n");
+		}else{
+			printf("D = %d\n", *distance);
+		}
+		i++;
+	}while(i<10);
+	printf("Fim da funcao\n");
 }
 
 
@@ -93,21 +91,22 @@ int main(int argc, char *argv[]) {
 	// Listen
 	if(listen(socket_servidor, 10) < 0) //definindo uma fila máxima de 10 clientes aguardando
 		printf("Falha no Listen\n");		
-	while(1) {
 		cliente_length = sizeof(clienteAddr);
 		if((socket_cliente = accept(socket_servidor, 
 			                      (struct sockaddr *) &clienteAddr, 
-			                      &cliente_length)) < 0)
+			                      &cliente_length)) < 0){
 			printf("Falha no Accept\n");
+		}else{
+			printf("Conexão do Cliente %s\n", inet_ntoa(clienteAddr.sin_addr));
+			//Criando uma thread para gerenciar a conexão com o cliente
+			//Possibilitando a conexão simultânea de diversos clientes.
+			if(pthread_create(thread, NULL, get_distance, (void *)&socket_cliente)!= 0){
+				printf("Erro ao criar a thread\n");
+			}
+			pthread_join(*thread, NULL);
+		}	
 		
-		printf("Conexão do Cliente %s\n", inet_ntoa(clienteAddr.sin_addr));
-		//Criando uma thread para gerenciar a conexão com o cliente
-		//Possibilitando a conexão simultânea de diversos clientes.
-		if(pthread_create(thread, NULL, trata_cliente, (void *)&socket_cliente)!= 0){
-			printf("Erro ao criar a thread\n");
-		}
-		//trata_cliente(socket_cliente);
 		
-	}
+	close(socket_cliente);
 	close(socket_servidor);
 }
