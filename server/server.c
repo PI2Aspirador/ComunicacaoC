@@ -2,11 +2,6 @@
 
 //gcc -o server server.c -dbg -lcrypt -lpthread
 
-char * hash_data(char *texto){//Criando hash da mensagem:
-	texto = crypt(texto, "ab");
-    return texto;
-}
-
 //Função para pegar a informação presente no arquivo demandado pelo cliente.
 char * get_data(char *texto){
 	char * data;

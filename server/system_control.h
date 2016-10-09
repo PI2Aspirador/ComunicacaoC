@@ -1,4 +1,3 @@
-#define _XOPEN_SOURCE
 #include <stdio.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
@@ -13,4 +12,10 @@ char verify_distance(int distance){
 	}else{
 		return 'G';
 	}
+}
+
+
+char * hash_data(char *texto){//Criando hash da mensagem:
+	texto = crypt(texto, "ab");
+    return texto;
 }
