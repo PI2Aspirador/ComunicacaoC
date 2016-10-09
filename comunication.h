@@ -4,7 +4,7 @@
 void send_data(int distance){
     if (client.connected()) {
       Serial.println(distance);
-      client.print(distance);//Envia distancia 
+      client.print((char)distance);//Envia distancia 
     }
  
   if (!client.connected()) {

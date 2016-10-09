@@ -41,18 +41,23 @@ char * get_data(char *texto){
 void * get_distance(void * socket_cliente) {
 	int tamanho_recebido, tamanho_envio, i=0;
 	int socket = *((int*) socket_cliente);
-	int *distance;
-	distance = malloc(sizeof(int*));
+	char * distance;
+	distance = malloc(sizeof(char*));
 	float limit = 5;
 
 	//pega a info, retornando o tamanho dessa info
 	printf("get_distance\n");
 	do{
 		printf("I = %d\n", i);
-		if((tamanho_recebido = recv(socket, &distance, sizeof(float*), 0)) < 0){
+		if((tamanho_recebido = recv(socket, distance, sizeof(distance), 0)) < 0){
 			printf("Erro no recv()\n");
 		}else{
-			printf("D = %d\n", *distance);
+			if((int)*distance < 0){
+				//nothing to do
+			}else{
+				printf("D = %d\n", *distance);
+				printf("%d redebidos\n", tamanho_recebido);
+			}
 		}
 		i++;
 	}while(i<10);
