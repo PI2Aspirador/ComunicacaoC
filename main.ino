@@ -7,17 +7,18 @@ void setup () {
   conect();
   // Inicializa o pino digital como uma saída.
   // Pin 13 tem um LED conectado na maioria das placas Arduino:
-  pinMode (13, OUTPUT);
-  digitalWrite(13, false);
-  pinMode(12, OUTPUT);
-  digitalWrite(12, false);
+  //pinMode (pino_red, OUTPUT);
+  //digitalWrite(pino_red, false);
+  pinMode(pino_green, OUTPUT);
+  digitalWrite(pino_green, false);
   
 }
 
 void loop () {
-  check_print_red();
-  check_print_green();
+  //check_print_red();
+  //check_print_green();
   check_sonar();
+  check_instructions();
 }
 
 

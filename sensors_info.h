@@ -1,5 +1,4 @@
 #include <Ultrasonic.h>
-#include "util.h"
 #include "comunication.h"
 
 #define pino_trigger_sonar 4
@@ -16,11 +15,10 @@ void get_distance() {
   int len=0;
   char * mensagem;
   cmMsec = ultrasonic.convert(microsec, Ultrasonic::CM);
-  Serial.print("Enviando\n");
   send_data((int)cmMsec);
   
-  if(cmMsec < 5){
-    print_exit();
-    exit(1);
-  }
+  //if(cmMsec < 5){
+   // print_exit();
+    //exit(1);
+  //}
 }

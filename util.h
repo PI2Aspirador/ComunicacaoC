@@ -1,4 +1,4 @@
-#define pino_red 13
+#define pino_red 12
 #define pino_green 12
 #include <Utility.h>
 
@@ -6,23 +6,20 @@ void print_red();
 void print_green();
 
 void print_red() {
+  Serial.println("Eita que entrou RED");
+  digitalWrite(pino_green, LOW);
+  delay(50);
   digitalWrite(pino_red, HIGH);
-  delay(100);
-  digitalWrite(pino_red, LOW);
-  delay(100);
-  digitalWrite(pino_red, HIGH);
-  delay(100);
-  digitalWrite(pino_red, LOW);
 }
 
 void print_green() {
+  Serial.println("Eita que entrou GREEN");
+  //digitalWrite(pino_red, LOW);
+  //delay(50);
   digitalWrite(pino_green, HIGH);
-  delay(100);
-  digitalWrite(pino_green, LOW);
-  delay(100);
-  digitalWrite(pino_green, HIGH);
-  delay(100);
-  
+}
+
+void low_green(){
   digitalWrite(pino_green, LOW);
 }
 

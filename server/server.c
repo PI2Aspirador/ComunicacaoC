@@ -1,11 +1,4 @@
-#define _XOPEN_SOURCE
-#include <stdio.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <pthread.h>
+#include "system_control.h"
 
 //gcc -o server server.c -dbg -lcrypt -lpthread
 
@@ -41,26 +34,30 @@ char * get_data(char *texto){
 void * get_distance(void * socket_cliente) {
 	int tamanho_recebido, tamanho_envio, i=0;
 	int socket = *((int*) socket_cliente);
-	char * distance;
-	distance = malloc(sizeof(char*));
-	float limit = 5;
+	char * msg;
+	msg = malloc(sizeof(char*));
+	int *distance;
+	char result;
 
 	//pega a info, retornando o tamanho dessa info
-	printf("get_distance\n");
+	printf("get_msg\n");
 	do{
 		printf("I = %d\n", i);
-		if((tamanho_recebido = recv(socket, distance, sizeof(distance), 0)) < 0){
+		if((tamanho_recebido = recv(socket, msg, sizeof(msg), 0)) < 0){
 			printf("Erro no recv()\n");
 		}else{
-			if((int)*distance < 0){
+			if((int)*msg < 0){
 				//nothing to do
 			}else{
-				printf("D = %d\n", *distance);
-				printf("%d redebidos\n", tamanho_recebido);
+				printf("D = %d\n", *msg);
+				distance = (int*)msg;
+				result = verify_distance(*distance);
+				if(send(socket, &result, sizeof(char), 0) != sizeof(char))
+					printf("Erro no envio - send()\n");
 			}
 		}
 		i++;
-	}while(i<10);
+	}while(*distance>5);
 	printf("Fim da funcao\n");
 }
 

@@ -4,7 +4,6 @@
 //Assinaturas
 void conect();
 void send_data(void *msg);
-char * read_data();
 
 //Definindo MAC, ip do cliente e ip do servidor
 byte mac[] = {
