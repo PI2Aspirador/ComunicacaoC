@@ -2,3 +2,7 @@ language: c
 script:
   - make
   - make test
+notifications:
+  slack:
+    rooms:
+      - pi2aspirador:N7LtC4BgMZpPpBYjdR2KCSeq#autonomia
