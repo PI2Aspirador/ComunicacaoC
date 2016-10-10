@@ -2,29 +2,6 @@
 
 //gcc -o server server.c -dbg -lcrypt -lpthread
 
-//Função para pegar a informação presente no arquivo demandado pelo cliente.
-char * get_data(char *texto){
-	char * data;
-	char * texto_completo;
-	FILE *fp;
-
-	fp = fopen(texto, "r");//abrindo arquivo somente para leitura
-	if(fp == NULL){//Caso não encontre o arquivo
-		printf("404 Not Found");
-		return "404 Not Found\n";
-	}
-
-	data = malloc(sizeof(char*));
-	texto_completo = malloc(sizeof(char*));
-
-	while(fgets(data, 100, (FILE*)fp) != NULL){//Enquanto não chegar ao fim do arquivo
-		strcat(texto_completo, data);//concatenando cada linha do arquivo para gerar o texto completo
-	}
-
-	fclose(fp);
-	return texto_completo;//Retorna o conteudo do arquivo
-}
-
 //Função utilizada para tratar toda a conexão com o cliente
 void * get_distance(void * socket_cliente) {
 	int tamanho_recebido, tamanho_envio, i=0;
