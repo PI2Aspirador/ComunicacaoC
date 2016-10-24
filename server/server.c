@@ -21,10 +21,10 @@ void * get_distance(void * socket_cliente) {
 			if((int)*msg < 0){
 				//nothing to do
 			}else{
-				printf("D = %d\n", *msg);
-				distance = (int*)msg;
-				result = verify_distance(*distance);
-				if(send(socket, &result, sizeof(char), 0) != sizeof(char))
+				printf("D = %s\n", msg);
+				//distance = (int*)msg;
+				//result = verify_distance(*distance);
+				if(send(socket, "oi amigo", sizeof(char), 0) != sizeof(char))
 					printf("Erro no envio - send()\n");
 			}
 		}

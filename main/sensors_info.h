@@ -1,8 +1,8 @@
 #include <Ultrasonic.h>
 #include "comunication.h"
 
-#define pino_trigger_sonar 4
-#define pino_echo_sonar 5
+#define pino_trigger_sonar 38
+#define pino_echo_sonar 40
 
 //Inicializando o sonar
 Ultrasonic ultrasonic(pino_trigger_sonar, pino_echo_sonar);
