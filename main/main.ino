@@ -19,8 +19,8 @@ void setup () {
 void loop () {
   //check_print_red();
   //check_print_green();
-  //check_sonar();
-  //check_instructions();
+  check_sonar();
+  check_instructions();
 }
 
 

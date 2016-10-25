@@ -1,18 +1,19 @@
 #include "ESP8266.h"
 #include "parser_network_info.h"
 
+
 #define DEBUG true
 #define SSID "r2-pi2"
 #define PASS "12345678"
-#define DST_IP "182.168.0.26"
+#define DST_IP "192.168.0.128"
 
 ESP8266 wifi(Serial1);
 
 //Assinaturas
 void conect();
-void send_data(void *msg);
+void send_data_wifi(String command, const int timeout, boolean debug);
 
-String sendData(String command, const int timeout, boolean debug)
+void send_data_wifi(String command, const int timeout, boolean debug)
 {
   // Envio dos comandos AT para o modulo
   String response = "";
@@ -31,17 +32,19 @@ String sendData(String command, const int timeout, boolean debug)
   {
     //Serial.print(response);
   }
-  return response;
 }
 
 //Abrindo conexão com a raspberry
 void conect(){
+  uint32_t port = 8090;
   char *msg;
   char * rssi;
+  //send_data_wifi("AT+RST\r\n", 2000, DEBUG);
+  //send_data_wifi("AT+CIOBAUD=19200\r\n", 2000, DEBUG);
   Serial.print("Versao de Firmware ESP8266: ");
     //A funcao wifi.getVersion() retorna a versao de firmware informada pelo modulo no inicio da comunicacao
 
-    sendData("AT+GMR\r\n", 2000, DEBUG);
+    send_data_wifi("AT+GMR\r\n", 2000, DEBUG);
     
     //Vamos setar o modulo para operar em modo Station (conecta em WiFi) e modo AP (é um ponto de WiFi tambem)
     if (wifi.setOprToStationSoftAP()) {
@@ -55,27 +58,29 @@ void conect(){
         Serial.println("Conectado com Sucesso.");
         Serial.println("IP: ");
         //rotina wifi.getLocalIP() retorna o IP usado na conexao com AP conectada.
-        sendData("AT+CIFSR\r\n", 2000, DEBUG);    
+        send_data_wifi("AT+CIFSR\r\n", 2000, DEBUG);    
     } else {
         Serial.println("Falha na conexao AP.");
     }
-    
-    //Agora vamos habiliar a funcionalidade MUX, que permite a realizacao de varias conexoes TCP/UDP
-    if (wifi.enableMUX()) {
-        Serial.println("Multiplas conexoes OK.");
+  
+    if (wifi.disableMUX()) {
+        Serial.print("single ok\r\n");
     } else {
-        Serial.println("Erro ao setar multiplas conexoes.");
+        Serial.print("single err\r\n");
     }
     
-    //Inicia servidor TCP na porta 8090 (veja depois a funcao "startServer(numero_porta)", que serve para UDP!
-    if (wifi.startTCPServer(8090)) {
-        Serial.println("Servidor iniciado com sucesso.");
+    Serial.println("Criando conexao TCP");
+    
+     if (wifi.createTCP(DST_IP, port)) {
+        Serial.print("create tcp ok\r\n");
     } else {
-        Serial.println("Erro ao iniciar servidor.");
-    }    
-    rssi = get_rssi(sendData("AT+CWLAP\r\n", 5000, DEBUG));
+        Serial.print("create tcp err\r\n");
+    }
+    //rssi = get_rssi(send_data_wifi("AT+CWLAP\r\n", 5000, DEBUG));
     Serial.println("Setup finalizado!");
     Serial.println(rssi);
+
+    
 }
 
 double get_rssi(){
