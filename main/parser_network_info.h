@@ -7,50 +7,6 @@ char* get_ip(char* string);
 char** str_split(char* a_str, const char a_delim);
 char* get_rssi(char* string);
 
-char* get_rssi(char* string){
-	char** tokens;
-	char* result; 
-	tokens = str_split(string, ',');
-
-	if (tokens)
-    {
-        int i;
-        for (i = 0; *(tokens + i); i++)
-        {
-        	if(strcmp(*(tokens + i), " \"r2-pi2\"")==0){
-        		result = *(tokens + i + 1);
-        		break;
-        	}
-        }
-        free(tokens);
-    } 
-
-    result = &result[1];
-
-    return result;
-}
-
-char* get_ip(char * string){
-	char** tokens;
-	char* result; 
-	tokens = str_split(string, '"');
-
-	if (tokens)
-    {
-        int i;
-        for (i = 0; *(tokens + i); i++)
-        {
-            if(i=1){
-            	result = *(tokens + i);
-            	break;
-            }
-        }
-        free(tokens);
-    } 
-
-    return result;
-}
-
 char** str_split(char* a_str, const char a_delim)
 {
     char** result    = 0;
@@ -98,3 +54,65 @@ char** str_split(char* a_str, const char a_delim)
 
     return result;
 }
+
+
+char* get_rssi(String string){
+  char** token;
+  char* result; 
+  char * string_convert;
+  int i=0;
+  int achei =0;
+  Serial.println("EITA PORRA");
+  string.toCharArray(string_convert, sizeof(string));
+  Serial.println(string_convert);
+
+  Serial.println("Vamos ver..");
+  Serial.println(string_convert);
+  token = str_split(string_convert, ',');
+
+  if (token){
+    Serial.println("FOOOI");
+    int i;
+    for (i = 0; *(token + i); i++){//Ele não ta entrando nesse for, o token ta com nulo. A string convertida ta nula.. então seus tokens também. Retirar tipo String.
+      Serial.print("Token=[");
+      Serial.print(*(token + i));
+      Serial.println("]");
+      free(*(token + i));
+    }
+    printf("\n");
+    free(token);
+  }
+
+    
+    strcat(result, "\0"); 
+    Serial.print("Olha: ");
+    Serial.println(result);
+    //result = &result[1];
+
+    Serial.println(result);
+    return result;
+    
+}
+
+char* get_ip(char * string){
+  char** tokens;
+  char* result; 
+  tokens = str_split(string, '"');
+
+  if (tokens)
+    {
+        int i;
+        for (i = 0; *(tokens + i); i++)
+        {
+            if(i=1){
+              result = *(tokens + i);
+              break;
+            }
+        }
+        free(tokens);
+    } 
+
+    return result;
+}
+
+
