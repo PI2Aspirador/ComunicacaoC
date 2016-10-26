@@ -37,14 +37,14 @@ void send_data_wifi(String command, const int timeout, boolean debug)
 //Abrindo conexão com a raspberry
 void conect(){
   uint32_t port = 8090;
-  char *msg;
-  char * rssi;
-  //send_data_wifi("AT+RST\r\n", 2000, DEBUG);
+  //char *msg;
+  //char * rssi;
+  send_data_wifi("AT+RST\r\n", 2000, DEBUG);
   //send_data_wifi("AT+CIOBAUD=19200\r\n", 2000, DEBUG);
-  Serial.print("Versao de Firmware ESP8266: ");
+  //Serial.print("Versao de Firmware ESP8266: ");
     //A funcao wifi.getVersion() retorna a versao de firmware informada pelo modulo no inicio da comunicacao
 
-    send_data_wifi("AT+GMR\r\n", 2000, DEBUG);
+    //send_data_wifi("AT+GMR\r\n", 2000, DEBUG);
     
     //Vamos setar o modulo para operar em modo Station (conecta em WiFi) e modo AP (é um ponto de WiFi tambem)
     if (wifi.setOprToStationSoftAP()) {
@@ -52,15 +52,18 @@ void conect(){
     } else {
         Serial.println("Erro em setar Station e AP.");
     }
- 
+
+    Serial.println("Conectando na rede..");
     //Agora vamos conectar no ponto de WiFi informado no inicio do codigo, e ver se corre tudo certo
     if (wifi.joinAP(SSID, PASS)) {
         Serial.println("Conectado com Sucesso.");
-        Serial.println("IP: ");
+        //Serial.println("IP: ");
         //rotina wifi.getLocalIP() retorna o IP usado na conexao com AP conectada.
         send_data_wifi("AT+CIFSR\r\n", 2000, DEBUG);    
     } else {
         Serial.println("Falha na conexao AP.");
+        delay(200);
+        exit(1);
     }
   
     if (wifi.disableMUX()) {
@@ -72,14 +75,13 @@ void conect(){
     Serial.println("Criando conexao TCP");
     
      if (wifi.createTCP(DST_IP, port)) {
-        Serial.print("create tcp ok\r\n");
+        Serial.print("Conexao TCP ok!\r\n");
     } else {
-        Serial.print("create tcp err\r\n");
+        Serial.print("Erro ao criar conexao TCP\r\n");
+        //delay(200);
+        //exit(1);
     }
     //rssi = get_rssi(send_data_wifi("AT+CWLAP\r\n", 5000, DEBUG));
-    Serial.println("Setup finalizado!");
-    Serial.println(rssi);
-
     
 }
 
@@ -88,4 +90,14 @@ double get_rssi(){
 
   return rssi;
 }
+
+void desconect(){
+ if (wifi.releaseTCP()) {
+        Serial.print("release tcp ok\r\n");
+    } else {
+        Serial.print("release tcp err\r\n");
+    }
+    delay(2000);
+}
+ 
 

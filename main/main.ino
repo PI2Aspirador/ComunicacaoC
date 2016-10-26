@@ -5,8 +5,11 @@
 void setup () {
   Serial.begin(9600);
   Serial1.begin(19200);
-  Serial.println("Agora vai em");
+  Serial.println("Configurando Conexao");
+  config_motors();
+  config_sonar();
   conect();
+  
   // Inicializa o pino digital como uma saída.
   // Pin 13 tem um LED conectado na maioria das placas Arduino:
   //pinMode (pino_red, OUTPUT);
@@ -19,8 +22,15 @@ void setup () {
 void loop () {
   //check_print_red();
   //check_print_green();
-  check_sonar();
-  check_instructions();
+  check_sonar1();
+  //check_sonar2();
+  //delay(250);
+  //check_sonar3();
+  //delay(250);
+  //check_instructions();
+  //delay(250);
+  desconect();
+  
 }
 
 

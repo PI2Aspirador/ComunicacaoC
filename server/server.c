@@ -8,8 +8,9 @@ void * get_distance(void * socket_cliente) {
 	int socket = *((int*) socket_cliente);
 	char * msg;
 	msg = malloc(sizeof(char*));
-	int *distance;
+	char *distance;
 	char result;
+	int range;
 
 	//pega a info, retornando o tamanho dessa info
 	printf("get_msg\n");
@@ -22,11 +23,22 @@ void * get_distance(void * socket_cliente) {
 				//nothing to do
 			}else{
 				msg[tamanho_recebido] = '\0';
+				printf("Olha: %d, %s\n", tamanho_recebido, msg);
+				if(msg[0] == 'F'){
+					printf("Achou F\n");
+					for(i=2 ; i<tamanho_recebido ; i++){
+						distance[i-2] = msg[i];
+					}
+					range = atoi(distance);
+					printf("Olha a distancia: %d", range);
+					if(range < 10 ){
+						if(send(socket, "PARA MANO, VAI BATER!", sizeof(char*), 0) != sizeof(char*))
+							printf("Erro no envio - send()\n");
+					}
+				}
 				printf("D = %s\n", msg);
 				//distance = (int*)msg;
 				//result = verify_distance(*distance);
-				if(send(socket, "eita vei", sizeof(char*), 0) != sizeof(char*))
-					printf("Erro no envio - send()\n");
 			}
 		}
 		i++;
