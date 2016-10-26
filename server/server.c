@@ -16,7 +16,7 @@ void * get_distance(void * socket_cliente) {
 	printf("get_msg\n");
 	do{
 		printf("I = %d\n", i);
-		if((tamanho_recebido = recv(socket, msg, 20, 0)) < 0){
+		if((tamanho_recebido = recv(socket, msg, sizeof(msg), 0)) < 0){
 			printf("Erro no recv()\n");
 		}else{
 			if((int)*msg < 0){

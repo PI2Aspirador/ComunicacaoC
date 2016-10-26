@@ -30,16 +30,20 @@ void get_distance_front() {
   //Serial.println("Frente");
   float cmMsec;
   long microsec = sonar_front.timing();
-  char * mensagem;
+  char mensagem[8];
   char * command;
-  sprintf(mensagem, "%f", cmMsec);
-  //Serial.print("Enviando:");
-  //Serial.println(mensagem);
+  cmMsec = sonar_front.convert(microsec, Ultrasonic::CM);
+
+  command = malloc(sizeof(cmMsec+2));
+  sprintf(mensagem, "%d", (int) cmMsec);
   strcpy(command, "F ");
   strcat(command, mensagem);
   Serial.println(command);
-  cmMsec = sonar_front.convert(microsec, Ultrasonic::CM);
+  
   send_data(command);
+
+  //free(mensagem);
+  //free(command);
 }
 
 void get_distance_right(){
@@ -57,6 +61,8 @@ void get_distance_right(){
   Serial.println(command);
   cmMsec = sonar_right.convert(microsec, Ultrasonic::CM);
   send_data(command);
+  free(mensagem);
+  free(command);
 }
 
 void get_distance_left(){
@@ -74,6 +80,9 @@ void get_distance_left(){
   Serial.println(command);
   cmMsec = sonar_left.convert(microsec, Ultrasonic::CM);
   send_data(command);
+
+  free(mensagem);
+  free(command);
 }
 
 

@@ -6,8 +6,8 @@ char read_data();
 
 //Envia dados a raspberry
 void send_data(char * msg){
-    //Serial.print("Send Data:");
-    //Serial.println(msg);
+    Serial.print("Send Data:");
+    Serial.println(msg);
     wifi.send((const uint8_t*)msg, strlen(msg));
 }
 
