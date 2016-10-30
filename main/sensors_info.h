@@ -38,12 +38,11 @@ void get_distance_front() {
   sprintf(mensagem, "%d", (int) cmMsec);
   strcpy(command, "F ");
   strcat(command, mensagem);
-  Serial.println(command);
+  //Serial.println(command);
   
   send_data(command);
 
-  //free(mensagem);
-  //free(command);
+  free(command);
 }
 
 void get_distance_right(){

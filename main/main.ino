@@ -29,7 +29,7 @@ void loop () {
   //delay(250);
   //check_instructions();
   //delay(250);
-  desconect();
+  //desconect();
   
 }
 

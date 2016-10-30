@@ -23,26 +23,35 @@ void * get_distance(void * socket_cliente) {
 				//nothing to do
 			}else{
 				msg[tamanho_recebido] = '\0';
-				printf("Olha: %d, %s\n", tamanho_recebido, msg);
-				if(msg[0] == 'F'){
-					printf("Achou F\n");
-					for(i=2 ; i<tamanho_recebido ; i++){
-						distance[i-2] = msg[i];
-					}
-					range = atoi(distance);
-					printf("Olha a distancia: %d", range);
-					if(range < 10 ){
-						if(send(socket, "PARA MANO, VAI BATER!", sizeof(char*), 0) != sizeof(char*))
-							printf("Erro no envio - send()\n");
-					}
+				switch(msg[0]){
+					case 'F':
+						printf("Achou F\n");
+						for(i=2 ; i<tamanho_recebido ; i++){
+							distance[i-2] = msg[i];
+						}
+						range = atoi(distance);
+						printf("Olha a distancia: %d", range);
+						if(range < 10 ){
+							if(send(socket, "PARA MANO, VAI BATER!", sizeof(char*), 0) != sizeof(char*))
+								printf("Erro no envio - send()\n");
+						}
+						break;
+					case 'R':
+						printf("Achou F\n");
+						for(i=2 ; i<tamanho_recebido ; i++){
+							distance[i-2] = msg[i];
+						}
+						range = atoi(distance);
+						break;
 				}
-				printf("D = %s\n", msg);
+				//free(msg);
 				//distance = (int*)msg;
 				//result = verify_distance(*distance);
 			}
 		}
 		i++;
 	}while(*distance>5);
+	free(msg);
 	printf("Fim da funcao\n");
 }
 
