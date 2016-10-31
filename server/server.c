@@ -29,21 +29,18 @@ void * get_distance(void * socket_cliente) {
 				msg[tamanho_recebido] = '\0';
 				switch(msg[0]){
 					case 'F':
-						printf("Achou Front\n");
 						for(i=2 ; i<tamanho_recebido ; i++){
 							distance[i-2] = msg[i];
 						}
 						range.front = atoi(distance);
 						break;
 					case 'R':
-						printf("Achou Right\n");
 						for(i=2 ; i<tamanho_recebido ; i++){
 							distance[i-2] = msg[i];
 						}
 						range.right = atoi(distance);
 						break;
 					case 'L':
-						printf("Achou Left\n");
 						for(i=2 ; i<tamanho_recebido ; i++){
 							distance[i-2] = msg[i];
 						}

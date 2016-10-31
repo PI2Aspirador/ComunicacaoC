@@ -31,19 +31,25 @@ char verify_distance(int distance){
 
 void * process_data(){
 	char * msg;//mensagem de retorno ao robo
+	int front;
+	int right;
+	int left;
 	range.front = 100;
 	range.left = 100;
 	range.right = 100;
 	infos.status = 'R';
 	printf("Entrou aqui\n");
 	do{
-		printf("Front =[%d], ", range.front);
-		printf("Right =[%d], ", range.right);
-		printf("Left =[%d]\n", range.left);
+		front  = range.front;
+		right = range.right;
+		left = range.left;
+		printf("Front =[%d], ", front);
+		printf("Right =[%d], ", right);
+		printf("Left =[%d]\n", left);
 		if(infos.status = 'R'){//Se ele está rodando pelo ambiente..
 			if(range.front <= 15){
 				printf("Entrou <15\n");
-				if(range.left > range.right){
+				if(left > right){
 					printf("Virando esquerda..");
 					//virar para esquerda
 					msg = "L 90";
@@ -63,6 +69,7 @@ void * process_data(){
 		}else{//se ele estiver voltando para base..
 			//lógica para retorno a base
 		}
+		sleep(1);
 	}while(infos.status != 'S');
 }
 
