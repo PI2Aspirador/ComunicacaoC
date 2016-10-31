@@ -5,7 +5,7 @@
 TimedAction thread1 = TimedAction(500, print_red);
 TimedAction thread2 = TimedAction(500, print_green);
 TimedAction thread_sonar = TimedAction(1000, get_distance_front);
-TimedAction thread_listen = TimedAction(1000, listen_infos);
+TimedAction thread_listen = TimedAction(500, listen_infos);
 
 void check_sonar1(){
   thread_sonar.check();

@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <pthread.h>
 
+pthread_mutex_t mutex;
+
 struct range{
 	int front;
 	int right;
@@ -29,37 +31,47 @@ char verify_distance(int distance){
 	}
 }
 
-void * process_data(){
+void * process_data(void * socket_cliente){
 	char * msg;//mensagem de retorno ao robo
 	int front;
 	int right;
 	int left;
+	int socket = *((int*) socket_cliente);
+	msg = malloc(sizeof(char*));
+	pthread_mutex_lock (&mutex);
 	range.front = 100;
 	range.left = 100;
 	range.right = 100;
+	pthread_mutex_unlock (&mutex);
 	infos.status = 'R';
 	printf("Entrou aqui\n");
 	do{
+		pthread_mutex_lock (&mutex);
 		front  = range.front;
 		right = range.right;
 		left = range.left;
+		pthread_mutex_unlock (&mutex);
 		printf("Front =[%d], ", front);
 		printf("Right =[%d], ", right);
 		printf("Left =[%d]\n", left);
+		printf("socket = [%d]\n", socket);
 		if(infos.status = 'R'){//Se ele está rodando pelo ambiente..
-			if(range.front <= 15){
+			if(front <= 15){
 				printf("Entrou <15\n");
+				//printf("vaaaai\n");
 				if(left > right){
-					printf("Virando esquerda..");
+					printf("Virando esquerda..\n");
+					strcpy(msg, "L 90");
 					//virar para esquerda
-					msg = "L 90";
-					if(send(infos.socket, msg, sizeof(msg), 0) != sizeof(msg)){
+					if(send(socket, msg, sizeof(msg), 0) != sizeof(msg)){
 						printf("Erro no envio - send()\n");
 					}
+					printf("eita fi\n");
 				}else{
 					printf("Virando direita..");
-					msg = "R 90";
-					if(send(infos.socket, msg, sizeof(msg), 0) != sizeof(msg)){
+					//msg = "R 90";
+					//printf("%s\n", msg);
+					if(send(socket, "R 90", sizeof(char*), 0) != sizeof(char*)){
 						printf("Erro no envio - send()\n");
 					}
 				}
@@ -71,6 +83,7 @@ void * process_data(){
 		}
 		sleep(1);
 	}while(infos.status != 'S');
+	free(msg);
 }
 
 

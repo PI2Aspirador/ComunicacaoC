@@ -5,22 +5,24 @@
 //Função utilizada para tratar toda a conexão com o cliente
 void * get_distance(void * socket_cliente) {
 	int tamanho_recebido, tamanho_envio, i=0;
-	infos.socket = *((int*) socket_cliente);
+	int socket = *((int*) socket_cliente);
 	pthread_t work_data;
 	char * msg;
-	msg = malloc(sizeof(char*));
 	char *distance;
+	msg = malloc(sizeof(char*));
+	distance = malloc(sizeof(char*));
 	char result;
+	pthread_mutex_init(&mutex, NULL);
 
 	//criando a thread que vai analisar e processar o conteudo recebido pelo arduino nesta conexão.
-	if(pthread_create(&work_data, NULL, process_data, NULL)!= 0){
+	if(pthread_create(&work_data, NULL, process_data, (void *)&socket)!= 0){
 		printf("Erro ao criar a thread\n");
 	}
 
 	//pega a info, retornando o tamanho dessa info
 	printf("get_msg\n");
 	do{
-		if((tamanho_recebido = recv(infos.socket, msg, sizeof(msg), 0)) < 0){
+		if((tamanho_recebido = recv(socket, msg, sizeof(msg), 0)) < 0){
 			printf("Erro no recv()\n");
 		}else{
 			if((int)*msg < 0){
@@ -32,19 +34,30 @@ void * get_distance(void * socket_cliente) {
 						for(i=2 ; i<tamanho_recebido ; i++){
 							distance[i-2] = msg[i];
 						}
+						pthread_mutex_lock (&mutex);
 						range.front = atoi(distance);
+						pthread_mutex_unlock (&mutex);
+						//printf("teste\n");
+						//if(send(socket, distance, sizeof(distance), 0) != sizeof(distance)){
+						//	printf("Erro no envio - send()\n");
+						//}
+						//printf("teste2\n");
 						break;
 					case 'R':
 						for(i=2 ; i<tamanho_recebido ; i++){
 							distance[i-2] = msg[i];
 						}
+						pthread_mutex_lock (&mutex);
 						range.right = atoi(distance);
+						pthread_mutex_unlock (&mutex);
 						break;
 					case 'L':
 						for(i=2 ; i<tamanho_recebido ; i++){
 							distance[i-2] = msg[i];
 						}
+						pthread_mutex_lock (&mutex);
 						range.left = atoi(distance);
+						pthread_mutex_unlock (&mutex);
 						break;
 
 				}
@@ -55,6 +68,7 @@ void * get_distance(void * socket_cliente) {
 	infos.status = 'S';
 	free(msg);
 	pthread_join(work_data, NULL);
+	pthread_mutex_destroy(&mutex);
 	printf("Fim da funcao\n");
 }
 
