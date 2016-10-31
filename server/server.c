@@ -5,18 +5,22 @@
 //Função utilizada para tratar toda a conexão com o cliente
 void * get_distance(void * socket_cliente) {
 	int tamanho_recebido, tamanho_envio, i=0;
-	int socket = *((int*) socket_cliente);
+	infos.socket = *((int*) socket_cliente);
+	pthread_t work_data;
 	char * msg;
 	msg = malloc(sizeof(char*));
 	char *distance;
 	char result;
-	int range;
+
+	//criando a thread que vai analisar e processar o conteudo recebido pelo arduino nesta conexão.
+	if(pthread_create(&work_data, NULL, process_data, NULL)!= 0){
+		printf("Erro ao criar a thread\n");
+	}
 
 	//pega a info, retornando o tamanho dessa info
 	printf("get_msg\n");
 	do{
-		printf("I = %d\n", i);
-		if((tamanho_recebido = recv(socket, msg, sizeof(msg), 0)) < 0){
+		if((tamanho_recebido = recv(infos.socket, msg, sizeof(msg), 0)) < 0){
 			printf("Erro no recv()\n");
 		}else{
 			if((int)*msg < 0){
@@ -25,33 +29,35 @@ void * get_distance(void * socket_cliente) {
 				msg[tamanho_recebido] = '\0';
 				switch(msg[0]){
 					case 'F':
-						printf("Achou F\n");
+						printf("Achou Front\n");
 						for(i=2 ; i<tamanho_recebido ; i++){
 							distance[i-2] = msg[i];
 						}
-						range = atoi(distance);
-						printf("Olha a distancia: %d", range);
-						if(range < 10 ){
-							if(send(socket, "PARA MANO, VAI BATER!", sizeof(char*), 0) != sizeof(char*))
-								printf("Erro no envio - send()\n");
-						}
+						range.front = atoi(distance);
 						break;
 					case 'R':
-						printf("Achou F\n");
+						printf("Achou Right\n");
 						for(i=2 ; i<tamanho_recebido ; i++){
 							distance[i-2] = msg[i];
 						}
-						range = atoi(distance);
+						range.right = atoi(distance);
 						break;
+					case 'L':
+						printf("Achou Left\n");
+						for(i=2 ; i<tamanho_recebido ; i++){
+							distance[i-2] = msg[i];
+						}
+						range.left = atoi(distance);
+						break;
+
 				}
-				//free(msg);
-				//distance = (int*)msg;
-				//result = verify_distance(*distance);
 			}
 		}
 		i++;
 	}while(*distance>5);
+	infos.status = 'S';
 	free(msg);
+	pthread_join(work_data, NULL);
 	printf("Fim da funcao\n");
 }
 
