@@ -27,17 +27,6 @@ int test_verify_big_distance(){
 	}
 }
 
-int test_hash_data(){
-	char *text = "blabla";
-	char *hashed_text = hash_data(text);
-	if (strcmp(hashed_text, "abE745FOPspe2") == 0){
-		printf(".");
-		return 1;
-	}
-	else{
-		return 0;
-	}
-}
 
 int test_get_data(){
 	char *text = "server/test_text.txt";
@@ -65,12 +54,6 @@ void run_test_suite(){
 		printf("\nTest test_verify_big_distance failed.\n");
 		failed++;
 	}
-
-	int test3 = test_hash_data();
-	if (!test3){
-		printf("\nTest hash_data failed.\n");
-		failed++;
-	}	
 
 	int test4 = test_get_data();
 	if (!test4){

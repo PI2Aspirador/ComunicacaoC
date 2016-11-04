@@ -1,0 +1,26 @@
+Inicializando modulo
+Versao do firmware:
+AT+GMR
+AT version:1.1.0.0(May 11 2016 18:09:56)
+SDK version:1.5.4(baaeaebb)
+Ai-Thinker Technology Co. Ltd.
+Jun 13 2016 11:29:20
+OK
+Modo STA ok
+Conectado com sucesso a rede wireless
+IP: +CIFSR:STAIP, "192.168.0.14"
++CIFSR:STAMAC, "5c:cf:7f:d0:a7:15"
+AT+CIFSR
++CIFSR:STAIP, "192.168.0.14"
++CIFSR:STAMAC, "5c:cf:7f:d0:a7:15"
+
+OK
+
+Wifi disponiveis:
+AT+OWLAP
++OWLAP:(4, "GCT-8F38", -60, "5c:dc:96:93:8f:39", 1, 45, 0)
++OWLAP:(4, "r2-pi2", -69, "54:e6:fc:ab:14:68", 1, 23, 0)
++OWLAP:(3, "asionfdqowjn", -80, "5c:dc:96:93:8f:39", 1, 45, 0)
++OWLAP:(4, "hueuheuheu", -90, "5c:dc:96:93:8f:39", 1, 45, 0)
+
+OK
