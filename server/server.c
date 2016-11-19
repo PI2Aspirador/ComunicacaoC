@@ -59,7 +59,22 @@ void * get_distance(void * socket_cliente) {
 						range.left = atoi(distance);
 						pthread_mutex_unlock (&mutex);
 						break;
-
+					case 'E':
+						for(i=2 ; i<tamanho_recebido ; i++){
+							distance[i-2] = msg[i];
+						}
+						pthread_mutex_lock (&mutex);
+						range.rleft = atoi(distance);
+						pthread_mutex_unlock (&mutex);
+						break;
+					case 'D':
+						for(i=2 ; i<tamanho_recebido ; i++){
+							distance[i-2] = msg[i];
+						}
+						pthread_mutex_lock (&mutex);
+						range.rright = atoi(distance);
+						pthread_mutex_unlock (&mutex);
+						break;
 				}
 			}
 		}

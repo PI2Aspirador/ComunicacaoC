@@ -17,14 +17,14 @@ void config_motors(){
   pinMode(velocityB, OUTPUT);
 }
 
-void drive_esquerda() {          //função drive_esquerda
+void turn_to_left() {          //função drive_esquerda
   digitalWrite(PortPin2, LOW);     //Motor 1
   digitalWrite(PortPin3, HIGH);    //Motor 2
   digitalWrite(PortPin4, HIGH);    //Motor 1
   digitalWrite(PortPin5, LOW);     //Motor 2
 }
 
-void drive_direita() {            //função drive_direita
+void turn_to_right() {            //função drive_direita
   digitalWrite(PortPin2, HIGH);     //Motor 1
   digitalWrite(PortPin3, LOW);      //Motor 1
   digitalWrite(PortPin4, LOW);      //Motor 2

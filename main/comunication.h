@@ -15,11 +15,18 @@ void listen_infos(){
   uint8_t buffer[128] = {0};
   uint32_t len = wifi.recv(buffer, sizeof(buffer), 1000);
     if (len > 0) {
-        Serial.print("Received:[");
+        Serial.print("Recebido:[");
         for(uint32_t i = 0; i < len; i++) {
             Serial.print((char)buffer[i]);
         }
         Serial.print("]\r\n");
+        if(buffer[0] == 'L'){
+            turn_to_left();
+        }else{
+            if(buffer[0] == 'R'){
+                turn_to_right();
+            }
+        }
     }
 }
 
