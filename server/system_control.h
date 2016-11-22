@@ -70,7 +70,7 @@ void * process_data(void * socket_cliente){
 
 
 		if(infos.status = 'R'){//Se ele está rodando pelo ambiente..
-			if(front <= 15 || right <=15 || left <= 15){
+			if(front < 15){
 				printf("Entrou <15\n");
 				//printf("vaaaai\n");
 				if(rleft > rright){
