@@ -5,7 +5,7 @@
 #define DEBUG true
 #define SSID "r2-pi2"
 #define PASS "12345678"
-#define DST_IP "192.168.0.128"
+#define DST_IP "192.168.0.17"
 
 ESP8266 wifi(Serial1);
 
@@ -13,8 +13,7 @@ ESP8266 wifi(Serial1);
 void conect();
 void send_data_wifi(String command, const int timeout, boolean debug);
 
-void send_data_wifi(String command, const int timeout, boolean debug)
-{
+void send_data_wifi(String command, const int timeout, boolean debug){
   // Envio dos comandos AT para o modulo
   String response = "";
   Serial1.print(command);
