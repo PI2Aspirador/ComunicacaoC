@@ -65,8 +65,8 @@ void * process_data(void * socket_cliente){
 		printf("Front =[%d], ", front);
 		printf("Right =[%d], ", right);
 		printf("Left =[%d]\n", left);
-		printf("Roda direita =[%d],", rright);
-		printf("Roda esquerda =[%d]\n", rleft);
+		//printf("Roda direita =[%d],", rright);
+		//printf("Roda esquerda =[%d]\n", rleft);
 
 
 		if(infos.status = 'R'){//Se ele está rodando pelo ambiente..
@@ -96,6 +96,9 @@ void * process_data(void * socket_cliente){
 		}
 		sleep(1);
 	}while(infos.status != 'S');
+	if(send(socket, "S", sizeof(char), 0) != sizeof(char)){
+		printf("Erro no envio - send()\n");
+	}
 	free(msg);
 }
 

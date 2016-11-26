@@ -29,6 +29,7 @@ void setup () {
 void loop () {
   //check_print_red();
   //check_print_green();
+  drive_frente();
   check_sonar1();
   check_instructions();
   //delay(250);

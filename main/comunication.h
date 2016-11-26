@@ -22,9 +22,16 @@ void listen_infos(){
         Serial.print("]\r\n");
         if(buffer[0] == 'L'){
             turn_to_left();
+            delay(900);
+            drive_frente();
         }else{
             if(buffer[0] == 'R'){
                 turn_to_right();
+                delay(900);
+                drive_frente();
+            }
+            if(buffer[0] == 'S'){
+                drive_stop();
             }
         }
     }
