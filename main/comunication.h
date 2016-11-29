@@ -21,14 +21,18 @@ void listen_infos(){
         }
         Serial.print("]\r\n");
         if(buffer[0] == 'L'){
+            drive_stop();
+            delay(1000);
             turn_to_left();
-            delay(900);
-            drive_frente();
+            delay(1200);
+            //drive_frente();
         }else{
             if(buffer[0] == 'R'){
+                drive_stop();
+                delay(1000);
                 turn_to_right();
-                delay(900);
-                drive_frente();
+                delay(1200);
+                //drive_frente();
             }
             if(buffer[0] == 'S'){
                 drive_stop();
