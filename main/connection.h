@@ -5,7 +5,7 @@
 #define DEBUG true
 #define SSID "r2-pi2"
 #define PASS "12345678"
-#define DST_IP "192.168.0.19"
+#define DST_IP "192.168.0.128"
 
 ESP8266 wifi(Serial1);
 
@@ -69,13 +69,12 @@ void conect(){
     
     Serial.println("Criando conexao TCP");
     
-     if (wifi.createTCP(DST_IP, port)) {
-        Serial.print("Conexao TCP ok!\r\n");
-    } else {
+     while(!wifi.createTCP(DST_IP, port)) {
         Serial.print("Erro ao criar conexao TCP\r\n");
         //delay(200);
         //exit(1);
     }
+    Serial.print("Conexao TCP ok!\r\n");
     //rssi = get_rssi(send_data_wifi("AT+CWLAP\r\n", 5000, DEBUG));
     
 }

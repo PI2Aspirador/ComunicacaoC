@@ -22,6 +22,7 @@ void turn_to_left() {          //função drive_esquerda
   digitalWrite(PortPin3, HIGH);    //Motor 2
   digitalWrite(PortPin4, HIGH);    //Motor 1
   digitalWrite(PortPin5, LOW);     //Motor 2
+  delay(2000);
 }
 
 void turn_to_right() {            //função drive_direita
@@ -29,6 +30,7 @@ void turn_to_right() {            //função drive_direita
   digitalWrite(PortPin3, LOW);      //Motor 1
   digitalWrite(PortPin4, LOW);      //Motor 2
   digitalWrite(PortPin5, HIGH);     //Motor 2
+  delay(2000);
 }
 
 void drive_stop() {               //função drive_stop

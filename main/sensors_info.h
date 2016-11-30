@@ -5,28 +5,29 @@
 #define trigerpin_f 22 //Sensor ultrassônico da frente
 #define echopin_f2  28  //Sensor ultrassônico da frente de baixo
 #define trigerpin_f2 26 //Sensor ultrassônico da frente de baixo
-#define echopin_r 32  //Sensor ultrassônico da direita 32
-#define trigerpin_r 30 //Sensor ultrassônico da direita 30
+#define echopin_r 45  //Sensor ultrassônico da direita 32
+#define trigerpin_r 43 //Sensor ultrassônico da direita 30
 #define echopin_l 36 //Sensor ultrassônico da esquerda 36
 #define trigerpin_l 34 //Sensor ultrassônico da esquerda 34
-#define echopin_dr 40  //Sensor ultrassônico da roda esquerda
-#define trigerpin_dr 38  //Sensor ultrassônico da roda esquerda
+#define echopin_dr 44  //Sensor ultrassônico da roda direita
+#define trigerpin_dr 42  //Sensor ultrassônico da roda direita
 #define echopin_dl 40  //Sensor ultrassônico da roda esquerda
 #define trigerpin_dl 38  //Sensor ultrassônico da roda esquerda
 
+//INVERTER.. DIAGONAL ESQUERDA VIRANDO ESQUERDA!!!! 
+
 //Inicializando o sonar
 Ultrasonic sonar_front(trigerpin_f, echopin_f);
+Ultrasonic sonar_front2(trigerpin_f2, echopin_f2);
 Ultrasonic sonar_right(trigerpin_r, echopin_r);
 Ultrasonic sonar_left(trigerpin_l, echopin_l);
-Ultrasonic sonar_rleft(trigerpin_dl, echopin_dl);
-Ultrasonic sonar_rright(trigerpin_dr, echopin_dr);
+Ultrasonic sonar_dleft(trigerpin_dl, echopin_dl);
+Ultrasonic sonar_dright(trigerpin_dr, echopin_dr);
 
-void get_distance_front();
-void get_distance_front2();
-void get_distance_right();
-void get_distance_left();
-void get_distance_dleft();
-void get_distance_dright();
+int get_distance_front();
+int get_distance_front2();
+int get_distance_dleft();
+int get_distance_dright();
 
 void config_sonar(){
   pinMode(echopin_f, INPUT);
@@ -47,120 +48,92 @@ void config_sonar(){
 //R = Right
 //F = Front
 
+void get_distance(){
+   float cmMsec;
+   char mensagem[8];
+   char * command;
+   long microsec;
+
+    microsec = sonar_left.timing();
+    cmMsec = sonar_left.convert(microsec, Ultrasonic::CM); 
+    Serial.print(".");
+   if(cmMsec > 100){
+    cmMsec = 90;
+   }
+
+   command = malloc(sizeof(cmMsec+2));
+   sprintf(mensagem, "%d", (int) cmMsec);
+   strcpy(command, mensagem);
+
+    microsec = sonar_right.timing();
+    cmMsec = sonar_right.convert(microsec, Ultrasonic::CM); 
+    Serial.print("*");
+   if(cmMsec > 100){
+    cmMsec = 90;
+   }
+
+   Serial.println("EITA FI 3");
+   
+   strcat(command, ",");
+   sprintf(mensagem, "%d", (int) cmMsec);
+   strcat(command, mensagem);
+   Serial.print("COMANDO: ");
+   Serial.println(command);
+   send_data(command);
+   free(command);
+}
+
 //Função que pega a distância do sonar da frente (cima)
-void get_distance_front() {
+int get_distance_front() {
   float cmMsec;
-  long microsec = sonar_front.timing();
-  char mensagem[8];
-  char * command;
-  cmMsec = sonar_front.convert(microsec, Ultrasonic::CM);
-
-  command = malloc(sizeof(cmMsec+2));
-  sprintf(mensagem, "%d", (int) cmMsec);
-  strcpy(command, "F ");
-  strcat(command, mensagem);
-
-  //Enviando comando pra rasp
-  send_data(command);
-  //Fazendo o mesmo com a frente 2 (de baixo)
-  get_distance_front2();
-  free(command);
+  do{
+    long microsec = sonar_front.timing();
+  
+    cmMsec = sonar_front.convert(microsec, Ultrasonic::CM);
+  }while(cmMsec < 2);
+  
+  Serial.print("FRENTE1: ");
+  Serial.println((int)cmMsec);
+  return (int) cmMsec;
 }
 
 //Função que pega a distância do sonar da frente (baixo)
-void get_distance_front2() {
+int get_distance_front2() {
   float cmMsec;
-  long microsec = sonar_front.timing();
-  char mensagem[8];
-  char * command;
-  cmMsec = sonar_front.convert(microsec, Ultrasonic::CM);
-
-  command = malloc(sizeof(cmMsec+2));
-  sprintf(mensagem, "%d", (int) cmMsec);
-  strcpy(command, "F ");
-  strcat(command, mensagem);
-  //Serial.println(command);
+  do{
+    long microsec = sonar_front.timing();
   
-  send_data(command);
-  //Fazendo o mesmo com a direita
-  get_distance_right();
-  free(command);
-}
-
-//Função que pega a distância do sonar da direita
-void get_distance_right(){
-  float cmMsec;
-  long microsec = sonar_right.timing();
-  char mensagem[8];
-  char * command;
-  cmMsec = sonar_right.convert(microsec, Ultrasonic::CM);
-
-  command = malloc(sizeof(cmMsec+2));
-  sprintf(mensagem, "%d", (int) cmMsec);
-  strcpy(command, "D ");
-  strcat(command, mensagem);
-  //Serial.println(command);
+    cmMsec = sonar_front.convert(microsec, Ultrasonic::CM);
+  }while(cmMsec < 2);
   
-  send_data(command);
-  get_distance_left();
-
-  free(command);
-}
-
-//Função que pega a distância do sonar da esquerda
-void get_distance_left(){
-  float cmMsec;
-  long microsec = sonar_left.timing();
-  char mensagem[8];
-  char * command;
-  cmMsec = sonar_left.convert(microsec, Ultrasonic::CM);
-
-  command = malloc(sizeof(cmMsec+2));
-  sprintf(mensagem, "%d", (int) cmMsec);
-  strcpy(command, "E ");
-  strcat(command, mensagem);
-  //Serial.println(command);
-  
-  send_data(command);
-
-  get_distance_dleft();
-  free(command);
+  Serial.print("FRENTE2: ");
+  Serial.println((int)cmMsec);
+  return (int) cmMsec;
 }
 
 //Função que pega a distância do sonar da diagonal esquerda
-void get_distance_dleft(){
-   float cmMsec;
-   long microsec = sonar_rleft.timing();
-   char mensagem[8];
-   char * command;
-   cmMsec = sonar_rleft.convert(microsec, Ultrasonic::CM);
-
-   command = malloc(sizeof(cmMsec+2));
-   sprintf(mensagem, "%d", (int) cmMsec);
-   strcpy(command, "E ");
-   strcat(command, mensagem);
-  
-   send_data(command);
-
-   get_distance_dright();
-
-   free(command);
+int get_distance_dleft(){
+  float cmMsec;
+  do{
+    long microsec = sonar_dleft.timing();
+    cmMsec = sonar_dleft.convert(microsec, Ultrasonic::CM);
+    
+  }while(cmMsec < 2 || cmMsec > 500);
+  Serial.print("D ESQUERDA: ");
+  Serial.println((int)cmMsec);
+  return (int) cmMsec;
  }
 
 //Função que pega a distância do sonar da diagonal direita
-void get_distance_dright(){
-   float cmMsec;
-   long microsec = sonar_rright.timing();
-   char mensagem[8];
-   char * command;
-   cmMsec = sonar_rright.convert(microsec, Ultrasonic::CM);
-
-   command = malloc(sizeof(cmMsec+2));
-   sprintf(mensagem, "%d", (int) cmMsec);
-   strcpy(command, "D ");
-   strcat(command, mensagem);
- 
-   send_data(command);
-
-   free(command);
+int get_distance_dright(){
+  float cmMsec;
+  //do{
+     Serial.print(".");
+    long microsec = sonar_dright.timing();
+    cmMsec = sonar_dright.convert(microsec, Ultrasonic::CM);
+  //}while(cmMsec < 2 || cmMsec > 500);
+  
+  Serial.print("D DIREITA: ");
+  Serial.println((int)cmMsec);
+  return (int) cmMsec;
 }

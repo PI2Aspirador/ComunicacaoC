@@ -14,6 +14,7 @@ void setup () {
   pinMode(pin4, OUTPUT);
   pinMode(pin5, OUTPUT);
   pinMode(pin6, OUTPUT);
+  pinMode(pin4, OUTPUT);
   digitalWrite(pin1, HIGH);
   digitalWrite(pin2, HIGH);
   digitalWrite(pin3, HIGH);
@@ -42,11 +43,22 @@ void loop () {
   //check_print_red();
   //check_print_green();
   drive_frente();
-  check_sonar1();
-  check_instructions();
-  //delay(250);
-  //desconect();
-  
+ 
+
+  if(get_distance_front2() <= 15 || get_distance_front() <= 15 || get_distance_dleft() <= 15 || get_distance_dright() <= 15 ){
+    drive_stop(); 
+    delay(200);
+    get_distance();
+    if(turn_to() == 1){
+      turn_to_left();
+    }else{
+      if(turn_to() == 2){
+        turn_to_right();
+      }else{
+        exit(1); // Sai do código (deliga o robo).
+      }
+    }
+  }
 }
 
 

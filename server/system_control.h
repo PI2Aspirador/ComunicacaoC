@@ -33,76 +33,76 @@ char verify_distance(int distance){
 	}
 }
 
-void * process_data(void * socket_cliente){
-	char * msg;//mensagem de retorno ao robo
-	int front;
-	int right;
-	int left;
-	int dleft;//Estão com R mas são os da diagonal
-	int dright;//Estão com R mas são os da diagonal
-	int socket = *((int*) socket_cliente);
-	msg = malloc(sizeof(char*));
+// void * process_data(void * socket_cliente){
+// 	char * msg;//mensagem de retorno ao robo
+// 	int front;
+// 	int right;
+// 	int left;
+// 	int dleft;//Estão com R mas são os da diagonal
+// 	int dright;//Estão com R mas são os da diagonal
+// 	int socket = *((int*) socket_cliente);
+// 	msg = malloc(sizeof(char*));
 
-	//Inicializando todos com 100
-	pthread_mutex_lock (&mutex);
-	range.front = 100;
-	range.left = 100;
-	range.right = 100;
-	range.dright = 100;
-	range.dleft = 100;
-	pthread_mutex_unlock (&mutex);
-	infos.status = 'R';
+// 	//Inicializando todos com 100
+// 	pthread_mutex_lock (&mutex);
+// 	range.front = 100;
+// 	range.left = 100;
+// 	range.right = 100;
+// 	range.dright = 100;
+// 	range.dleft = 100;
+// 	pthread_mutex_unlock (&mutex);
+// 	infos.status = 'R';
 	
 
-	do{
-		//Pegando os dados das distâncias.
-		pthread_mutex_lock (&mutex);
-		front  = range.front;
-		right = range.right;
-		left = range.left;
-		dleft = range.dleft;
-		dright = range.dright;
-		pthread_mutex_unlock (&mutex);
+// 	do{
+// 		//Pegando os dados das distâncias.
+// 		pthread_mutex_lock (&mutex);
+// 		front  = range.front;
+// 		right = range.right;
+// 		left = range.left;
+// 		dleft = range.dleft;
+// 		dright = range.dright;
+// 		pthread_mutex_unlock (&mutex);
 
 		//Printando informações
-		printf("Front =[%d], ", front);
-		printf("Right =[%d], ", right);
-		printf("Left =[%d]\n", left);
-		printf("Diag direita =[%d],", dright);
-		printf("Diag esquerda =[%d]\n", dleft);
+		//printf("Front =[%d], ", front);
+		//printf("Right =[%d], ", right);
+		//printf("Left =[%d]\n", left);
+		// printf("Diag direita =[%d],", dright);
+		// printf("Diag esquerda =[%d]\n", dleft);
 
 
-		if(infos.status = 'R'){//Se ele está rodando pelo ambiente..
-			if(front <= 20 || dright <=15 || dleft <= 15){
-				printf("Entrou <15\n");
-				if(left > right){
-					printf("Virando esquerda..\n");
-					strcpy(msg, "L 90");
-					//virar para esquerda
-					if(send(socket, msg, sizeof(msg), 0) != sizeof(msg)){
-						printf("Erro no envio - send()\n");
-					}
-				}else{
-					printf("Virando direita..");
-					strcpy(msg, "R 90");
-					//printf("%s\n", msg);
-					if(send(socket, msg, sizeof(msg), 0) != sizeof(msg)){
-						printf("Erro no envio - send()\n");
-					}
-				}
-			}else{
-				printf(">15\n");
-			}
-		}else{//se ele estiver voltando para base..
-			//lógica para retorno a base
-		}
-		sleep(1);
-	}while(infos.status != 'S');
-	if(send(socket, "S", sizeof(char), 0) != sizeof(char)){
-		printf("Erro no envio - send()\n");
-	}
-	free(msg);
-}
+// 		if(infos.status = 'R'){//Se ele está rodando pelo ambiente..
+// 			// if(front <= 20 || dright <=15 || dleft <= 15){
+// 			// 	printf("Entrou <15\n");
+// 				if(dleft > dright && dleft != 100 && dright != 100){
+// 					printf("Virando esquerda..\n");
+// 					strcpy(msg, "L 90");
+// 					//virar para esquerda
+// 					if(send(socket, msg, sizeof(msg), 0) != sizeof(msg)){
+// 						printf("Erro no envio - send()\n");
+// 					}
+// 				}else{
+// 					printf("Virando direita..");
+// 					strcpy(msg, "R 90");
+// 					//printf("%s\n", msg);
+// 					if(send(socket, msg, sizeof(msg), 0) != sizeof(msg)){
+// 						printf("Erro no envio - send()\n");
+// 					}
+// 				}
+// 			// }else{
+// 			// 	printf(">15\n");
+// 			// }
+// 		}else{//se ele estiver voltando para base..
+// 			//lógica para retorno a base
+// 		}
+// 		sleep(1);
+// 	}while(infos.status != 'S');
+// 	if(send(socket, "S", sizeof(char), 0) != sizeof(char)){
+// 		printf("Erro no envio - send()\n");
+// 	}
+// 	free(msg);
+// }
 
 
 // char * hash_data(char *texto){//Criando hash da mensagem:

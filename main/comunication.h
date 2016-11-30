@@ -15,27 +15,48 @@ void listen_infos(){
   uint8_t buffer[128] = {0};
   uint32_t len = wifi.recv(buffer, sizeof(buffer), 1000);
     if (len > 0) {
-        Serial.print("Recebido:[");
+        //Serial.print("Recebido:[");
         for(uint32_t i = 0; i < len; i++) {
-            Serial.print((char)buffer[i]);
+            //Serial.print((char)buffer[i]);
         }
-        Serial.print("]\r\n");
+        //Serial.print("]\r\n");
         if(buffer[0] == 'L'){
             drive_stop();
-            delay(1000);
+            //delay(1000);
             turn_to_left();
             delay(1200);
             //drive_frente();
         }else{
             if(buffer[0] == 'R'){
                 drive_stop();
-                delay(1000);
+                //delay(1000);
                 turn_to_right();
                 delay(1200);
                 //drive_frente();
             }
             if(buffer[0] == 'S'){
                 drive_stop();
+            }
+        }
+    }
+}
+
+int turn_to(){
+  uint8_t buffer[128] = {0};
+  uint32_t len = wifi.recv(buffer, sizeof(buffer), 1000);
+  Serial.print("COMANDO RECEBIDO: ");
+  Serial.println((char*) buffer);
+  if (len > 0) {
+        if(buffer[0] == 'L'){
+            Serial.println("VIRANDO DIREITA");
+            return 1; // Esquerda
+        }else{
+            if(buffer[0] == 'R'){
+                Serial.println("VIRANDO ESQUERDA");
+                return 2; // Direita
+            }
+            if(buffer[0] == 'S'){
+                return 0; //PARAR
             }
         }
     }
