@@ -19,8 +19,6 @@ void * get_distance(void * socket_cliente) {
 		printf("Erro ao criar a thread\n");
 	}
 
-	//pega a info, retornando o tamanho dessa info
-	printf("get_msg\n");
 	do{
 		if((tamanho_recebido = recv(socket, msg, sizeof(msg), 0)) < 0){
 			printf("Erro no recv()\n");
@@ -37,11 +35,6 @@ void * get_distance(void * socket_cliente) {
 						pthread_mutex_lock (&mutex);
 						range.front = atoi(distance);
 						pthread_mutex_unlock (&mutex);
-						//printf("teste\n");
-						//if(send(socket, distance, sizeof(distance), 0) != sizeof(distance)){
-						//	printf("Erro no envio - send()\n");
-						//}
-						//printf("teste2\n");
 						break;
 					case 'R':
 						for(i=2 ; i<tamanho_recebido ; i++){
@@ -64,7 +57,7 @@ void * get_distance(void * socket_cliente) {
 							distance[i-2] = msg[i];
 						}
 						pthread_mutex_lock (&mutex);
-						range.rleft = atoi(distance);
+						range.dleft = atoi(distance);
 						pthread_mutex_unlock (&mutex);
 						break;
 					case 'D':
@@ -72,7 +65,7 @@ void * get_distance(void * socket_cliente) {
 							distance[i-2] = msg[i];
 						}
 						pthread_mutex_lock (&mutex);
-						range.rright = atoi(distance);
+						range.dright = atoi(distance);
 						pthread_mutex_unlock (&mutex);
 						break;
 				}

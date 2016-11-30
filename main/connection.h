@@ -5,7 +5,7 @@
 #define DEBUG true
 #define SSID "r2-pi2"
 #define PASS "12345678"
-#define DST_IP "192.168.0.17"
+#define DST_IP "192.168.0.19"
 
 ESP8266 wifi(Serial1);
 
@@ -18,18 +18,15 @@ void send_data_wifi(String command, const int timeout, boolean debug){
   String response = "";
   Serial1.print(command);
   long int time = millis();
-  while ( (time + timeout) > millis())
-  {
-    while (Serial1.available())
-    {
+  while ( (time + timeout) > millis()){
+    while (Serial1.available()){
       // The esp has data so display its output to the serial window
       char c = Serial1.read(); // read the next character.
       response += c;
     }
   }
-  if (debug)
-  {
-    //Serial.print(response);
+  if (debug){
+    Serial.print(response);
   }
 }
 
@@ -39,12 +36,11 @@ void conect(){
   //char *msg;
   //char * rssi;
   send_data_wifi("AT+RST\r\n", 2000, DEBUG);
-  //send_data_wifi("AT+CIOBAUD=19200\r\n", 2000, DEBUG);
-  //Serial.print("Versao de Firmware ESP8266: ");
+  send_data_wifi("AT+CIOBAUD=19200\r\n", 2000, DEBUG);
+  Serial.print("Versao de Firmware ESP8266: ");
     //A funcao wifi.getVersion() retorna a versao de firmware informada pelo modulo no inicio da comunicacao
-
-    //send_data_wifi("AT+GMR\r\n", 2000, DEBUG);
-    
+    send_data_wifi("AT+GMR\r\n", 2000, DEBUG);
+      
     //Vamos setar o modulo para operar em modo Station (conecta em WiFi) e modo AP (é um ponto de WiFi tambem)
     if (wifi.setOprToStationSoftAP()) {
         Serial.println("Station e AP OK.");

@@ -12,8 +12,8 @@ struct range{
 	int front;
 	int right;
 	int left;
-	int rright;
-	int rleft;
+	int dright;
+	int dleft;
 };
 
 struct info{
@@ -38,42 +38,44 @@ void * process_data(void * socket_cliente){
 	int front;
 	int right;
 	int left;
-	int rleft;
-	int rright;
+	int dleft;//Estão com R mas são os da diagonal
+	int dright;//Estão com R mas são os da diagonal
 	int socket = *((int*) socket_cliente);
 	msg = malloc(sizeof(char*));
+
+	//Inicializando todos com 100
 	pthread_mutex_lock (&mutex);
 	range.front = 100;
 	range.left = 100;
 	range.right = 100;
-	range.rright = 100;
-	range.rleft = 100;
+	range.dright = 100;
+	range.dleft = 100;
 	pthread_mutex_unlock (&mutex);
 	infos.status = 'R';
-	printf("Entrou aqui\n");
+	
+
 	do{
 		//Pegando os dados das distâncias.
 		pthread_mutex_lock (&mutex);
 		front  = range.front;
 		right = range.right;
 		left = range.left;
-		rleft = range.rleft;
-		rright = range.rright;
+		dleft = range.dleft;
+		dright = range.dright;
 		pthread_mutex_unlock (&mutex);
 
 		//Printando informações
 		printf("Front =[%d], ", front);
 		printf("Right =[%d], ", right);
 		printf("Left =[%d]\n", left);
-		//printf("Roda direita =[%d],", rright);
-		//printf("Roda esquerda =[%d]\n", rleft);
+		printf("Diag direita =[%d],", dright);
+		printf("Diag esquerda =[%d]\n", dleft);
 
 
 		if(infos.status = 'R'){//Se ele está rodando pelo ambiente..
-			if(front <= 15 || right <=15 || left <= 15){
+			if(front <= 20 || dright <=15 || dleft <= 15){
 				printf("Entrou <15\n");
-				//printf("vaaaai\n");
-				if(rleft > rright){
+				if(left > right){
 					printf("Virando esquerda..\n");
 					strcpy(msg, "L 90");
 					//virar para esquerda
@@ -82,9 +84,9 @@ void * process_data(void * socket_cliente){
 					}
 				}else{
 					printf("Virando direita..");
-					//msg = "R 90";
+					strcpy(msg, "R 90");
 					//printf("%s\n", msg);
-					if(send(socket, "R 90", sizeof(char*), 0) != sizeof(char*)){
+					if(send(socket, msg, sizeof(msg), 0) != sizeof(msg)){
 						printf("Erro no envio - send()\n");
 					}
 				}
