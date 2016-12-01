@@ -7,14 +7,14 @@
 #define trigerpin_f2 26 //Sensor ultrassônico da frente de baixo
 #define echopin_r 45  //Sensor ultrassônico da direita 32
 #define trigerpin_r 43 //Sensor ultrassônico da direita 30
-#define echopin_l 36 //Sensor ultrassônico da esquerda 36
-#define trigerpin_l 34 //Sensor ultrassônico da esquerda 34
+#define echopin_l 37 //Sensor ultrassônico da esquerda 36
+#define trigerpin_l 35 //Sensor ultrassônico da esquerda 34
 #define echopin_dr 44  //Sensor ultrassônico da roda direita
 #define trigerpin_dr 42  //Sensor ultrassônico da roda direita
 #define echopin_dl 40  //Sensor ultrassônico da roda esquerda
 #define trigerpin_dl 38  //Sensor ultrassônico da roda esquerda
 
-//INVERTER.. DIAGONAL ESQUERDA VIRANDO ESQUERDA!!!! 
+//INVERTER.. DIAGONAL ESQUERDA VIRANDO DIREITA!!!! 
 
 //Inicializando o sonar
 Ultrasonic sonar_front(trigerpin_f, echopin_f);
@@ -50,34 +50,32 @@ void config_sonar(){
 
 void get_distance(){
    float cmMsec;
-   char mensagem[8];
+   char mensagem[10];
    char * command;
    long microsec;
 
-    microsec = sonar_left.timing();
-    cmMsec = sonar_left.convert(microsec, Ultrasonic::CM); 
-    Serial.print(".");
-   if(cmMsec > 100){
-    cmMsec = 90;
-   }
+    microsec = sonar_dleft.timing();//É a direita
+    cmMsec = sonar_dleft.convert(microsec, Ultrasonic::CM); 
+    if(cmMsec > 100){
+      cmMsec = 90;
+    }
 
-   command = malloc(sizeof(cmMsec+2));
+   command = malloc(sizeof(cmMsec+10));
    sprintf(mensagem, "%d", (int) cmMsec);
    strcpy(command, mensagem);
 
-    microsec = sonar_right.timing();
-    cmMsec = sonar_right.convert(microsec, Ultrasonic::CM); 
-    Serial.print("*");
-   if(cmMsec > 100){
-    cmMsec = 90;
-   }
+    microsec = sonar_left.timing();//É a esquerda
+    cmMsec = sonar_left.convert(microsec, Ultrasonic::CM); 
+    if(cmMsec > 100){
+      cmMsec = 90;
+    }
 
-   Serial.println("EITA FI 3");
-   
+    cmMsec = 10;
+  
    strcat(command, ",");
    sprintf(mensagem, "%d", (int) cmMsec);
    strcat(command, mensagem);
-   Serial.print("COMANDO: ");
+   Serial.print("DADOS: ");
    Serial.println(command);
    send_data(command);
    free(command);

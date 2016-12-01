@@ -45,7 +45,7 @@ void loop () {
   drive_frente();
  
 
-  if(get_distance_front2() <= 15 || get_distance_front() <= 15 || get_distance_dleft() <= 15 || get_distance_dright() <= 15 ){
+  if(get_distance_front2() <= 15 || get_distance_front() <= 15){
     drive_stop(); 
     delay(200);
     get_distance();
