@@ -31,27 +31,14 @@ void * get_distance(void * socket_cliente) {
 				//msg[tamanho_recebido] = '\0';
 				printf("RECEBI MENSAGEM: %s\n", msg);
 				i=0;
-				// while(msg[i] != ','){
-				// 	distance_right[i] = msg[i];
-				// 	i++;
-				// }
-				//distance_right[i] = '\0';
 				distance_right = strtok(msg, ",");
 				distance_left = strtok(NULL, ",");
 				i=strlen(distance_right);
 				distance_right[i] = '\0';
-				printf("DISTANCIA DIREITA: %d\n", atoi(distance_right));
 				j=0;
-				// while(msg[i+1] != '\0'){
-				// 	distance_left[j] = msg[i+1];
-				// 	i++;
-				// 	j++;
-				// }
-				//distance_left[j] = '\0';
+
 				i=strlen(distance_left);
 				distance_left[i] = '\0';
-
-				printf("DISTANCIA ESQUERDA: %d\n", atoi(distance_left));
 
 				if(atoi(distance_right) < atoi(distance_left)){
 					printf("Virando esquerda..\n");
