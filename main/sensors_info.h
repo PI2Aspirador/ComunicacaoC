@@ -59,8 +59,6 @@ void get_distance(){
     }
 
     soma = soma/5;
-    Serial.print("EITA PORRA: ");
-    Serial.println(soma);
     
 
     command = malloc(sizeof(char*));
@@ -79,9 +77,6 @@ void get_distance(){
     }
 
     soma = soma/5;
-
-    Serial.print("EITA PORRA 2: ");
-    Serial.println(soma);
   
    strcat(command, ",");
    sprintf(mensagem, "%d", (int) soma);

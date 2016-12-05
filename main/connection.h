@@ -3,9 +3,9 @@
 
 
 #define DEBUG true
-#define SSID "fazzolinos"
-#define PASS "249167608"
-#define DST_IP "192.168.0.19"
+#define SSID "r2-pi2"
+#define PASS "12345678"
+#define DST_IP "192.168.0.128"
 
 ESP8266 wifi(Serial1);
 
